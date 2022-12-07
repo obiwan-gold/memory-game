@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Card from "./components/Card";
 import Header from "./components/Header";
 import shuffle from "./utilities/shuffle";
+import useAppBadge from "./hooks/useAppBadge";
 
 function App() {
   // Cards to show in the UI
@@ -11,6 +12,8 @@ function App() {
   const [pickTwo, setPickTwo] = useState(null); // Second selection
   const [disabled, setDisabled] = useState(false); // Delay handler
   const [wins, setWins] = useState(0); // Win streak
+  const [setBadge, clearBadge] = useAppBadge();
+
   // Game Logic
   const handleClick = (card) => {
     // On Click, check if clicking is disabled
@@ -70,11 +73,13 @@ function App() {
       console.log("A win is a win");
       setWins(wins + 1);
       handleTurn();
+      setBadge();
       setCards(shuffle);
     }
-  }, [cards, wins]);
+  }, [cards, wins, setBadge]);
 
   const handleNewGame = () => {
+    clearBadge();
     setWins(0);
     handleTurn();
     setCards(shuffle);
